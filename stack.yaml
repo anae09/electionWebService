@@ -1,0 +1,99 @@
+version: '3'
+
+services:
+  authenticationDB:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - authenticationdbdata:/var/lib/mysql
+    networks:
+      - authentication_net
+  authenticationDBmigration:
+    image: authenticationdbmigration
+    environment:
+      - DATABASE_URL=authenticationDB
+    networks:
+      - authentication_net
+  authentication:
+    image: authentication
+    environment:
+      - DATABASE_URL=authenticationDB
+    ports:
+    - 5001:5001
+    networks:
+      - authentication_net
+  electionsDB:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - electiondbdata:/var/lib/mysql
+    networks:
+      - admin_net
+      - daemon_net
+  electionDBmigration:
+    image: electiondbmigration
+    environment:
+      - DATABASE_URL=electionsDB
+    networks:
+      - admin_net
+      - daemon_net
+  admin:
+    image: admin
+    environment:
+      - DATABASE_URL=electionsDB
+    ports:
+      - 5002:5002
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    networks:
+      - admin_net
+  redis-server:
+    image: redis
+    ports:
+    - 6379:6379
+    environment:
+      - TZ=Europe/Belgrade
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+    networks:
+      - daemon_net
+      - station_net
+  votingstation:
+    image: votingstation
+    environment:
+      - DATABASE_URL=electionsDB
+    ports:
+      - 5003:5003
+    deploy:
+      replicas: 3
+    networks:
+      - station_net
+  daemon:
+    image: daemon
+    environment:
+      - DATABASE_URL=electionsDB
+      - TZ=Europe/Belgrade
+    networks:
+      - daemon_net
+    volumes:
+      - "/etc/localtime:/etc/localtime:ro"
+      - "/etc/timezone:/etc/timezone:ro"
+
+
+volumes:
+  authenticationdbdata:
+  electiondbdata:
+
+networks:
+  authentication_net:
+    driver: overlay
+  admin_net:
+    driver: overlay
+  daemon_net:
+    driver: overlay
+  station_net:
+    driver: overlay
