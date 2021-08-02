@@ -5,11 +5,12 @@ There are also Docker Image templates which represent parts of the system and ca
 User authentication utilizes JSON Web Tokens.
 
 For running this web service:
->> Open project in Pycharm
->> Add Configuration -> Type: Docker Image -> foreach dockerfile (admin.dockerfile, authentication.dockerfile, authenticationDBmigration.dockerfile,
-daemon.dockerfile, electionDBmigration.dockerfile, votingstation.dockerfile)
->> Add Configuration -> Type: Docker-Compose -> deployment.yaml
->> Run deployment
+> Open project in Pycharm<br/>
+> Add Configuration -> Type: Docker Image -> foreach dockerfile (set image tag to match the name in deployment.yaml)<br/>
+> Add Configuration -> Type: Docker-Compose -> deployment.yaml<br/>
+> Run deployment
+
+stack.yaml is configured for cluster in Docker Swarm and development.yaml is configured for local testing.
 
 ## Description
 
@@ -18,25 +19,37 @@ There are two parts of the system, one for the user authentication and the other
 
 ### User Authentication
 
-1. User Registration
-  URL: /register
-  Type: POST
-  Body: JSON of given format
-    {
-      "jmbg": "...",
-      "forename": "...",
-      "surname": "...",
-      "email": "...",
-      "password": "..."
-    }
+User authentication part of the system consists of 3 docker images:
+> authentication.dockerfile <br/>
+> authenticationDBmigration.dockerfile -> for initial migration of authenticationDB; adds admin <br/>
+> mysql image for authentication database
 
-2. Login
-  URL: /login
-  Type: POST
-  Body: JSON of given format
-    {
-      "email": "...",
-      "password": "..."
-    }
-    
- 3. Refresh Access Token
+Available services:
+* User Registration
+* Login
+* Refresh Access Token
+* Delete User
+
+### Election process management
+
+Election process management part of the system consists of 4 docker images:
+> admin.dockerfile <br/>
+> votingstation.dockerfile <br/>
+> daemon.dockerfile <br/>
+> redis image for temporary storing of votes data
+> mysql image for election database
+
+Admin container provides services for:
+* Creating participant
+* Getting participants info
+* Creating election
+* Getting election list
+* Getting election results
+
+Voting station container provides service for officials and votes registration.<br/>
+Information about votes is temporarily placed on Redis service.<br/>
+Daemon service validates votes on Redis and saves data in election database.
+<br/><br/>
+More information about available services in **IEP_PROJEKAT2021.pdf**.
+
+
