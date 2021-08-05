@@ -36,7 +36,7 @@ Election process management part of the system consists of 4 docker images:
 > admin.dockerfile <br/>
 > votingstation.dockerfile <br/>
 > daemon.dockerfile <br/>
-> redis image for temporary storing of votes data
+> redis image for temporary storing of votes data <br/>
 > mysql image for election database
 
 Admin container provides services for:
