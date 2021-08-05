@@ -4,7 +4,7 @@ School project implemented using Python programming language and Flask and SQLAl
 There are also Docker Image templates which represent parts of the system and can be used for running Docker Containers.
 User authentication utilizes JSON Web Tokens.
 
-For running this web service:
+To run this web service:
 > Open project in Pycharm<br/>
 > Add Configuration -> Type: Docker Image -> foreach dockerfile (set image tag to match the name in deployment.yaml)<br/>
 > Add Configuration -> Type: Docker-Compose -> deployment.yaml<br/>
