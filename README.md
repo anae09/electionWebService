@@ -14,7 +14,7 @@ stack.yaml is configured for cluster in Docker Swarm and development.yaml is con
 
 ## Description
 
-Web service which enables users to register participants (political party or individual), create and run election, and fetch election results.
+Web service which enables users to register participants (political party or individual), create and run an election, and fetch election results.
 There are two parts of the system, one for the user authentication and the other for running elections.
 
 ### User Authentication
@@ -48,7 +48,7 @@ Admin container provides services for:
 
 Voting station container provides service for officials and votes registration.<br/>
 Information about votes is temporarily placed on Redis service.<br/>
-Daemon service validates votes on Redis and saves data in election database.
+Daemon service validates votes on Redis and saves data in the election database.
 <br/><br/>
 More information about available services in **IEP_PROJEKAT2021.pdf**.
 
